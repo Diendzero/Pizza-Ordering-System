@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/static/css/customer/orderdetail.css">
+    <meta charset="UTF-8">
+    <title>Edit Comment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .rating {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .star {
+            font-size: 36px;
+            cursor: pointer;
+            color: #ccc;
+            transition: color 0.2s;
+        }
+
+        .star:hover {
+            color: gold;
+        }
+
+        form {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            margin-top: 10px;
+        }
+
+        textarea {
+            margin-top: 5px;
+            resize: none;
+            height: 150px; /* 您可以根据需要调整高度 */
+        }
+
+        button {
+            margin-top: 15px;
+            background-color: rgb(3, 122, 219);
+            color: white;
+            font-size: 18px;
+            padding: 12px 24px;
+        }
+
+
+    </style>
+    <script>
+        function setRating(rating) {
+            document.getElementById('rating').value = rating;
+            for (let i = 1; i <= 5; i++) {
+                let star = document.getElementById('star' + i);
+                star.style.color = i <= rating ? 'gold' : '#ccc';
+            }
+        }
+
+        function submitForm() {
+            let rating = document.getElementById('rating').value;
+            if (rating === '0') {
+                alert('Please rate the order.');
+                return;
+            }
+            document.getElementById('commentForm').submit();
+        }
+    </script>
+</head>
+
+<div class="left-side"></div>
+<div class="right-side"></div>
+
+<div class="left-line"></div>
+<div class="right-line"></div>
+
+<div class="card mt-50 mb-50">
+
+
+<body>
+    <h1  style="margin-left: 130px;">Edit Comment</h1>
+    <button class="cancel-btn" onclick="window.location.href='/menu/personalCenter/orders'">Cancel</button>
+    <form id="commentForm" th:action="@{/menu/personalCenter/orders/{orderId}/edit-comment(orderId=${orderId})}" th:object="${comment}" method="post">
+        
+        <label for="content">Please Type Your Comment Here:</label>
+        <textarea id="content" th:field="*{content}" rows="4" cols="50"></textarea>
+        <br>
+        <hr>
+        <p style="text-align: center;">Please Rating for This Order:</p>
+        <div class="rating">
+            <span class="star" id="star1" onclick="setRating(1)">&#9733;</span>
+            <span class="star" id="star2" onclick="setRating(2)">&#9733;</span>
+            <span class="star" id="star3" onclick="setRating(3)">&#9733;</span>
+            <span class="star" id="star4" onclick="setRating(4)">&#9733;</span>
+            <span class="star" id="star5" onclick="setRating(5)">&#9733;</span>
+            <input type="hidden" id="rating" th:field="*{rating}">
+        </div>
+        <button type="button" onclick="submitForm()">Release</button>
+    </form>
+    
+</body>
+</html>

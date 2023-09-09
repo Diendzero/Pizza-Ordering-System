@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+<head>
+    <meta charset="UTF-8"/>
+    <title>pizzaCustomizationPage</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/css/customer/customization.css">
+
+</head>
+    <!-- <body> -->
+    <body th:style="'background-image: url(/pngs/background.png)'">
+    <div class="container">
+        <div class="sidebar">
+          <a th:href="@{/menu}">Menu Page</a>
+          <a th:href='@{/menu/personalCenter/mainPage}'>Personal Center</a>
+          <a th:href="@{/menu/shoppingcart}">Shopping Cart</a>
+          <a th:href="@{/logout}">Log Out</a>
+        </div>
+
+
+        <div class="content">
+            <div class="row mt-3">
+                <div class="col text-center">
+                    <h1>Pizza customization page</h1>
+                    <h2>Our delicious pizza is made with fresh ingredients and baked to perfection. Choose your base and size to make it your own!</h2>
+                </div>
+            </div>
+
+
+        
+            <div class="container-fluid">
+
+
+                <div class="row">
+
+
+                    <div class="col-4 right-aligned">
+                        <img th:src="${imageurl}" alt="pizza" class="img-fluid" width="300px" height="300px">
+                    </div>
+
+                    <!-- <div class="url">
+                        <p><span th:text="${imageurl}"></span></p>
+                    </div> -->
+
+
+                    <div class="col-1 d-flex justify-content-center align-items-center">
+                        <div class="border-left border-right h-75">
+                        </div>
+                    </div>
+
+
+                    <div class="col-7">
+                <div>
+                    <table>
+                        <tr>
+                            <td><label>Select your base:</label></td>
+                            <td>
+                                <form th:action="@{/menu/customization}" method="get">
+                                    <input type="hidden" name="name" th:value="${name}">
+                                    <input type="hidden" name="size" th:value="${size}">
+                                    <input type="hidden" name="base" th:value="thin">
+                                    <input type="hidden" name="imageurl" th:value="${imageurl}">
+                                    <input type="hidden" name="description" th:value="${description}">
+                                    <button type="submit">thin</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form th:action="@{/menu/customization}" method="get">
+                                    <input type="hidden" name="name" th:value="${name}">
+                                    <input type="hidden" name="size" th:value="${size}">
+                                    <input type="hidden" name="base" th:value="hand">
+                                    <input type="hidden" name="imageurl" th:value="${imageurl}">
+                                    <input type="hidden" name="description" th:value="${description}">
+                                    <button type="submit">hand</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form th:action="@{/menu/customization}" method="get">
+                                    <input type="hidden" name="name" th:value="${name}">
+                                    <input type="hidden" name="size" th:value="${size}">
+                                    <input type="hidden" name="base" th:value="pan">
+                                    <input type="hidden" name="imageurl" th:value="${imageurl}">
+                                    <input type="hidden" name="description" th:value="${description}">
+                                    <button type="submit">pan</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+
+                <div>
+                    <table>
+                        <tr>
+                            <td>
+                                <label>Select your size:</label></td>
+                            <td>
+                                <form th:action="@{/menu/customization}" method="get">
+                                    <input type="hidden" name="name" th:value="${name}">
+                                    <input type="hidden" name="size" th:value="10">
+                                    <input type="hidden" name="base" th:value="${base}">
+                                    <input type="hidden" name="imageurl" th:value="${imageurl}">
+                                    <input type="hidden" name="description" th:value="${description}">
+                                    <button type="submit">10-inch</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form th:action="@{/menu/customization}" method="get">
+                                    <input type="hidden" name="name" th:value="${name}">
+                                    <input type="hidden" name="size" th:value="12">
+                                    <input type="hidden" name="base" th:value="${base}">
+                                    <input type="hidden" name="imageurl" th:value="${imageurl}">
+                                    <input type="hidden" name="description" th:value="${description}">
+                                    <button type="submit">12-inch</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form th:action="@{/menu/customization}" method="get">
+                                    <input type="hidden" name="name" th:value="${name}">
+                                    <input type="hidden" name="size" th:value="14">
+                                    <input type="hidden" name="base" th:value="${base}">
+                                    <input type="hidden" name="imageurl" th:value="${imageurl}">
+                                    <input type="hidden" name="description" th:value="${description}">
+                                    <button type="submit">14-inch</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form th:action="@{/menu/customization}" method="get">
+                                    <input type="hidden" name="name" th:value="${name}">
+                                    <input type="hidden" name="size" th:value="16">
+                                    <input type="hidden" name="base" th:value="${base}">
+                                    <input type="hidden" name="imageurl" th:value="${imageurl}">
+                                    <input type="hidden" name="description" th:value="${description}">
+                                    <button type="submit">16-inch</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="selection">
+                    <table>
+                        <tr>
+                            <td><span th:text="'Your selection is:'"></span></td>
+                            <td><span th:text="${size} + ' inches ' + ${base} + ' '+ ${name} + ' pizza'"></span></td>
+                        </tr>
+                    </table>
+                </div>
+
+
+                <div class="price">
+                    <span th:text="'The price for this pizza is : '"></span>
+                    <span class="price-value" th:text="${price} + '¥' "></span>
+                    <span>.</span>
+                    
+                </div>
+
+
+                <div class="add-to-cart">
+                <form th:action="@{/menu/customization}" method="post">
+                    <input type="hidden" name="pizzaId" th:value="${pizzaId}">
+                    <button type="submit">Add to cart</button>
+                </form></div>
+                    </div>
+                </div>
+
+
+                <div class="row mt-3">
+                    <div class="col">
+                        <h3>Pizza Description:</h3>
+                        <p><span th:text="${description}"></span></p>
+        </div>
+      </div>
+ 
+
+       

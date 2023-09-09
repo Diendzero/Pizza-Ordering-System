@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Payment</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../../static/js/pay.js"></script>
+    <link rel="stylesheet" href="../../static/css/customer/payment.css">
+</head>
+
+<body>
+<h1>Payment Confirmation</h1>
+<h2>Please scan to complete payment</h2>
+<p><span id="timer">5:00</span></p>
+<p2>remaining to close</p2>
+<h3>Please pay as soon as possible the order</h3>
+<h4>will be reserved for you for 5 minutes</h4>
+
+
+<form id="paymentForm" th:action="@{/menu/payment}" method="post">
+    <input type="hidden" name="orderId" th:value="${orderId}">
+    <button type="button" id="successfully_paid" class="paid">Sucessfully Paid</button>
+</form>
+
+<script>
+    document.getElementById("successfully_paid").addEventListener("click", function () {
+        alert("Payment succeeded!");
+        var form = document.getElementById("paymentForm");
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", form.action);
+        xhr.onload = function () {
+            window.location.href = "/menu";
+        };
+        xhr.send(new FormData(form));
+    });
+</script>
+
+
+<form th:action="@{/menu/orderdetails}" method="get">
+    <input type="hidden" name="orderId" th:value="${orderId}">
+    <button type="button" id="cancel" class="cancel">cancel</button>
+</form>
+
+<script>
+    document.getElementById("cancel").addEventListener("click", function () {
+        if (confirm("Are you sure you want to cancel the payment?")) {
+            window.location.href = "/menu/orderdetails?orderId=" + document.querySelector("input[name='orderId']").value;
+        }
+    });
+</script>
+
+
+<script>
+    var timeLeft = 300;
+    var timer = document.getElementById("timer");
+    var timeout = setTimeout(function () {
+        alert("TimeOut！");
+        window.location.href = "/menu/orderdetails?orderId=" + document.querySelector("input[name='orderId']").value;
+    }, timeLeft * 1000);
+    var interval = setInterval(function () {
+        timeLeft--;
+        var minutes = Math.floor(timeLeft / 60);
+        var seconds = timeLeft % 60;
+        timer.textContent = minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
+        if (timeLeft <= 0) {
+            clearInterval(interval);
+        }
+    }, 1000);
+</script>
+
+<div class="container">
+    <img src="../../static/pngs/payment.jpg" alt="My Image">
+</div>
+</body>
+</html>

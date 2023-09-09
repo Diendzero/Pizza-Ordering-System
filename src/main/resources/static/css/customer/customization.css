@@ -1,0 +1,116 @@
+.sidebar {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    padding: 20px;
+    width: 125px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #000;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: center;
+}
+
+.sidebar a:hover {
+    background-color: #ccc;
+} 
+
+
+/* form:last-child button[type="submit"] {
+    background-color: #2196F3;
+}
+
+form:last-child button[type="submit"]:hover {
+    background-color: #0D47A1;
+} */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #333;
+    color: #fff;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+h1 {
+    font-size: 50px;
+    margin-top: 80px;
+    margin-bottom: 30px;
+    color: #333;
+}
+h2 {
+    font-size: 20px;
+    margin-top: 30px;
+    color: #333;
+}
+
+.container-fluid{
+    margin-top: 80px;
+}
+
+.right-aligned {
+    float: right;
+}
+
+.col-7{
+    margin-top: 30px;
+}
+
+.add-to-cart button[type="submit"] {
+    background-color: rgb(204, 21, 21);
+    color: white;
+    border: none;
+    width: 130px; /* 调整按钮宽度 */
+    height: 50px; /* 调整按钮高度 */
+    font-size: 20px;
+    margin-top: 20px;
+    /* Add any other desired styles here */
+  }
+  
+  .price-value {
+      color: red;
+  }
+  
+
+  
+  .price {
+      text-align: left;
+      font-size: 30px;
+      margin-top: 8px;
+  }
+  
+  .selection {
+    font-size: 19px; /* 设置字体大小为 16 像素 */
+  }
+
+  .container {
+    padding-left: 100px;
+    padding-right: 100px;
+    margin-top: 50px;
+    padding-bottom: 90px;
+    background-color: rgba(255, 255, 255, 0.966); /* 设置为纯白色背景 */
+}

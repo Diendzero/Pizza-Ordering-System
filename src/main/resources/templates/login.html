@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <base th:href="@{/}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/static/css/login.css}">
+</head>
+
+<body th:class="login_main_body">
+
+<div th:class="login_form">
+    <div th:class="login_form_head1">
+        <div th:class="login_form_head1_div">
+            <h1 th:class="login_form_head1_word">Welcome to login your account!</h1>
+        </div>
+    </div>
+
+    <div th:class="login_form_head2">
+        <a th:class="login_form_home_href_a1" th:href="login">
+            <div>Home</div>
+        </a>
+
+        <div th:class="login_form_logo_div">
+            <img th:class="login_form_logo" src="../static/pngs/pizza.png" alt="Pizza"> <!--2-->
+        </div>
+
+        <a th:class="login_form_home_href_a2" th:href="register">
+            <div>Register</div>
+        </a>
+    </div>
+
+    <div th:class="form_body">
+
+        <form id="login_form" th:action="@{/Diylogin}" method="post">
+
+            <div th:class="input_container">
+                <span id="Error" class="error" th:if="${param.error}"
+                      th:text="${#session.getAttribute('exception')}"
+                      style="display: block;font-size: 15px"></span>
+            </div>
+
+            <div th:class="input_container">
+                <input th:class="itxt" type="text" placeholder=" " autocomplete="off" tabindex="1"
+                       name="username" id="username" required/>
+                <label for="username">Username</label>
+            </div>
+ 
+            <div th:class="input_container">
+                <input th:class="itxt" type="password" placeholder=" " autocomplete="off" tabindex="1"
+                       name="password" id="password" required/>
+                <label for="password">Password</label>
+            </div>
+
+            <div class="input_container">
+                <input type="submit" value="Login" th:class="submit_button"/>
+            </div>
+
+        </form>
+
+    </div>
+
+    <div th:class="form_bottom">
+            <span>
+                <p>PizzaOrder.Copyright &copy;2023</p>
+            </span>
+    </div>
+
+</div>
+
+</body>
+</html>

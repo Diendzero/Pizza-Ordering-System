@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="author" content="Yuan-Programmer" /> -->
+    <title>Pizza List</title>
+    <link href="/static/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="/static/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="/static/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="/static/css/animate.min.css" rel="stylesheet">
+    <link href="/static/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/manager/pizzalist.css">
+    <script src="/static/js/jquery-3.4.1/jquery-3.4.1.js"></script>
+
+    <style>
+    .Main_body {
+    background: url("../pngs/manager.jpg") no-repeat;
+    background-size: cover;
+    background-attachment: scroll;
+    margin-top: 0;
+    height: 100vh;
+    overflow-y: scroll;
+    }
+    </style>
+
+    <script>
+        function move() {
+            document.getElementById("btn1").style.left = "14.5%";
+            document.getElementById("btn1").style.display = "block";
+            document.getElementById("btn2").style.left = "23%";
+            document.getElementById("btn2").style.display = "block";
+        }
+    </script>
+
+    <script> 
+        function submitForm() {
+            var selectedPizzaIds = [];
+            var checkboxes = document.querySelectorAll("input[name='pizzaIds']:checked");
+            for (var i = 0; i < checkboxes.length; i++) {
+                selectedPizzaIds.push(checkboxes[i].value);
+            }
+
+            var rows = document.querySelectorAll(".sales-report-row");
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var pizzaName = row.cells[0].textContent;
+                if (selectedPizzaIds.indexOf(pizzaName) !== -1) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            }
+            document.querySelector("#overlay").style.display = "block";
+            document.querySelector("#popup").style.display = "block";
+        }
+    </script>
+
+    <script> 
+        function submitAllForm() {
+            var rows = document.querySelectorAll(".sales-report-row");
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var pizzaName = row.cells[0].textContent;
+                row.style.display = "";
+            }
+            document.querySelector("#overlay").style.display = "block";
+            document.querySelector("#popup").style.display = "block";
+        }
+    </script>
+</head>
+
+<body class="gray-bg; Main_body">
+
+<div id='box'>
+    <div id='nav'>
+        <ul type='none' style="font-size:30px;margin-left:30px;margin-top:130px;">
+            <li class="entry"><a th:href="@{/managerMenu}">>Main</a></li>
+            <li class="entry"><a th:href="@{/pizzalist}">>Product</a></li>
+            <li class="entry"><a th:href="@{/orderlist}">>Order</a></li>
+            <li class="entry"><a th:href="@{/userInfo}">>User</a></li>
+            <li class="entry"><a th:href="@{/logout}">>Log Out</a></li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight" style="margin-left:200px;margin-top:-720px;">
+    <div class="row" style="align-items:center;margin-top: 20px; margin-left: 5%; width: 160%">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h4>Pizza List</h4>
+                    <div class="ibox-tools">
+                        <button id="addPizzaBtn" class="btn btn-xs btn-rounded btn-primary"
+                                style="margin-top:-50px; width:60px; height:30px;">Add
+                        </button>
+                    </div>
+                </div>
+                <div class="ibox-content" style="height: 80ch; overflow: auto;">
+                    <div class="input-group">
+                        <input id="search" type="text" placeholder="Please input the key word"
+                               class="input-sm form-control"> <span class="input-group-btn">
+										<button id="findBtn" type="button" class="btn btn-sm btn-primary"
+                                                style="width:80px; height:30px;"> Search </button> </span>
+                    </div>
+                    <div id="pizzaTable" th:fragment="pizzaTable">
+                        <table class="footable table table-stripped toggle-arrow-tiny">
+                            <thead>
+                            <tr>
+                                <th>Select</th>
+                                <th>id</th>
+                                <th>name</th>
+                                <th>price</th>
+                                <th>description</th>
+                                <th>category</th>
+                                <th>status</th>
+                                <th>base</th>
+                                <th>size</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="pizza: ${pizza_list}">
+                                <td><input type="checkbox" name="pizzaIds" th:value="${pizza.id}"></td>
+                                <td th:text="${pizza.id}"></td>
+                                <td th:text="${pizza.name}"></td>
+                                <td th:text="${pizza.price}"></td>
+                                <td th:text="${pizza.description}"></td>
+                                <td th:text="${pizza.category}"></td>
+                                <td th:text="${pizza.status}"></td>
+                                <td th:text="${pizza.base}"></td>
+                                <td th:text="${pizza.size}"></td>
+                                <td style="width: 50px;">
+                                    <button th:onclick="updateBtn([[${pizza.id}]],[[${pizza.name}]],[[${pizza.price}]],[[${pizza.description}]],[[${pizza.category}]],[[${pizza.status}]],[[${pizza.base}]],[[${pizza.size}]])"
+                                            class="updateUserBtn btn btn-warning btn-xs btn-rounded" type="button"
+                                            style="width:80px; height:30px;">Update
+                                    </button>
+                                </td>
+                                <td style="width: 50px;">
+                                    <button th:onclick="|deleteBtn(${pizza.id})|"
+                                            class="deleteUserBtn btn btn-danger btn-xs btn-rounded" type="button"
+                                            style="width:80px; height:30px;">Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="view" id="btn2" onclick="submitAllForm()">View all products report</button>
+        <button class="view" id="btn1" onclick="submitForm()">View selected products report</button>
+        <button class="view" style="display: block;" onclick="move()">View report</button>
+    </div>
+</div>
+
+<div id="overlay"></div>
+<script>
+    var cancelButton = document.querySelector("#overlay");
+    if (cancelButton) {
+        cancelButton.addEventListener("click", function() {
+            document.querySelector("#popup").style.display = "none";
+            document.querySelector("#overlay").style.display = "none";
+        });
+    }
+</script>
+<div id="popup" class="footable table table-stripped toggle-arrow-tiny">
+    <table class="footable table table-stripped toggle-arrow-tiny">
+        <thead>
+        <tr>
+            <th>Pizza Id</th>
+            <th>Pizza Name</th>
+            <th>Pizza Base</th>
+            <th>Pizza Size</th>
+            <th>Total Number</th>
+            <th>Total Revenue</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${salesReport}" class="sales-report-row">
+            <td th:text="${item.id}"></td>
+            <td th:text="${item.pizzaName}"></td>
+            <td th:text="${item.pizzaBase}"></td>
+            <td th:text="${item.pizzaSize} + ' inches'"></td>
+            <td th:text="${item.totalNumber}"></td>
+            <td th:text="'¥' + ${item.totalRevenue}"></td>
+        </tr>
+        <tr class="sales-report-row">
+            <td colspan="4"><strong th:text="'Total turnover : ¥' + ${totalTotalRevenue}"></strong></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- 添加pizza的弹出框 -->
+<div id="modal-form-add" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 b-r">
+                        <div class="ibox-title">
+                            <h5>Add new Pizza</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <form id="addForm" class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">name：</label>
+                                    <div class="col-sm-8">
+                                        <input id="addPizzaName" type="text" placeholder="name" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">price：</label>
+                                    <div class="col-sm-8">
+                                        <input id="addPizzaPrice" type="text" placeholder="price" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">description：</label>
+                                    <div class="col-sm-8">
+                                        <input id="addPizzaDescription" type="text" placeholder="description"
+                                               class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">category：</label>
+                                    <div class="col-sm-8">
+                                        <input id="addPizzaCategory" type="text" placeholder="category"
+                                               class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">status：</label>
+                                    <div class="col-sm-8">
+                                        <select id="addPizzaStatus" name="status">
+                                            <option value="On Sale">On Sale</option>
+                                            <option value="Sold Out">Sold Out</option>
+                                            <option value="Removed">Removed</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">base：</label>
+                                    <div class="col-sm-8">
+                                        <select id="addPizzaBase" name="base">
+                                            <option value="Pan">Pan</option>
+                                            <option value="Hand">Hand</option>
+                                            <option value="Thin">Thin</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">size：</label>
+                                    <div class="col-sm-8">
+                                        <select id="addPizzaSize" name="size">
+                                            <option value="10">10</option>
+                                            <option value="12">12</option>
+                                            <option value="14">14</option>
+                                            <option value="16">16</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button id="addSubmitBtn" class="btn btn-primary btn-primary pull-right m-t-n-xs"
+                                            type="button">Submit
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 修改订单的弹出框 -->
+<div id="modal-form-update" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 b-r">
+                        <div class="ibox-title">
+                            <h5>Update the Pizza</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <form id="updateForm" class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">id：</label>
+                                    <div class="col-sm-8">
+                                        <input id="updatePizzaId" type="text" placeholder="id" class="form-control"
+                                               disabled>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">name：</label>
+                                    <div class="col-sm-8">
+                                        <input id="updatePizzaName" type="text" placeholder="name" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">price：</label>
+                                    <div class="col-sm-8">
+                                        <input id="updatePizzaPrice" type="text" placeholder="price"
+                                               class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">description：</label>
+                                    <div class="col-sm-8">
+                                        <input id="updatePizzaDescription" type="text" placeholder="description"
+                                               class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">category：</label>
+                                    <div class="col-sm-8">
+                                        <input id="updatePizzaCategory" type="text" placeholder="category"
+                                               class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">status：</label>
+                                    <div class="col-sm-8">
+                                        <select id="updatePizzaStatus" placeholder="status">
+                                            <option value="On Sale">On Sale</option>
+                                            <option value="Sold Out">On Sale</option>
+                                            <option value="Removed">Removed</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">base：</label>
+                                    <div class="col-sm-8">
+                                        <select id="updatePizzaBase" placeholder="base">
+                                            <option value="Pan">Pan</option>
+                                            <option value="Hand">Hand</option>
+                                            <option value="Thin">Thin</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">size：</label>
+                                    <div class="col-sm-8">
+                                        <select id="updatePizzaSize" placeholder="size">
+                                            <option value="10">10</option>
+                                            <option value="12">12</option>
+                                            <option value="14">14</option>
+                                            <option value="16">16</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button id="updateSubmitBtn" class="btn btn-primary btn-primary pull-right m-t-n-xs"
+                                            type="button" style="width:80px; height:30px;">Submit
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/js/jquery.min.js?v=2.1.4"></script>
+<script src="/static/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="/static/js/plugins/peity/jquery.peity.min.js"></script>
+<script src="/static/js/content.min.js?v=1.0.0"></script>
+<script src="/static/js/plugins/iCheck/icheck.min.js"></script>
+<script src="/static/js/demo/peity-demo.min.js"></script>
+<script src="/static/js/myJS/pizzalist.js"></script>
+
+<script th:inline="javascript">
+    function deleteBtn(id) {
+        var r = window.confirm(" Delete the selected order record?")
+        if (r == true) {
+            $.ajax({
+                type: 'POST',
+                url: '/pizza/delete',
+                data: {
+                    'id': id
+                },
+                success: function (data) {
+                    $('#pizzaTable').html(data)
+                },
+                error: function (err) {
+                    console.log(err)
+                    alert("Error! Please try again！")
+                }
+            })
+        } else {
+        }
+    }
+
+    function updateBtn(id, name, price, description, category, status, base, size) {
+        $('#modal-form-update').modal('show');
+        $('#updatePizzaId').val(id)
+        $('#updatePizzaName').val(name)
+        $('#updatePizzaPrice').val(price)
+        $('#updatePizzaDescription').val(description)
+        $('#updatePizzaCategory').val(category)
+        $('#updatePizzaStatus').val(status)
+        $('#updatePizzaBase').val(base)
+        $('#updatePizzaSize').val(size)
+    }
+
+</script>
+
+</body>
+</html>

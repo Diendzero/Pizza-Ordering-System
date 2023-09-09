@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>Main Menu</title>
+
+    <link href="/static/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="/static/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="/static/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="/static/css/animate.min.css" rel="stylesheet">
+    <link href="/static/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <script src="/static/js/jquery-3.4.1/jquery-3.4.1.js"></script>
+    <link rel="stylesheet" href="/static/css/manager/managerMenu.css">
+
+    <style>
+    .Main_body {
+    background: url("../pngs/manager.jpg") no-repeat;
+    background-size: cover;
+    background-attachment: scroll;
+    margin-top: 0;
+    height: 100vh;
+    overflow-y: scroll;
+    }
+    </style>
+
+</head>
+
+<body class="Main_body">
+<div id='box'>
+    <div id='nav'>
+        <ul type='none' style="font-size:30px;margin-left:30px;margin-top:130px;">
+            <li class="entry"><a th:href="@{/managerMenu}">>Main</a></li>
+            <li class="entry"><a th:href="@{/pizzalist}">>Product</a></li>
+            <li class="entry"><a th:href="@{/orderlist}">>Order</a></li>
+            <li class="entry"><a th:href="@{/userInfo}">>User</a></li>
+            <li class="entry"><a th:href="@{/logout}">>Log Out</a></li>
+        </ul>
+    </div>
+</div>
+
+<div  style="margin-left:100px;margin-top:-730px" ;>
+    <h1 style="text-align: center;margin-top:150px; color:deepskyblue;"><u><b>Main Menu</b></u></h1>
+    <h1 style="text-align: center; margin-top:50px; color:deepskyblue;"><b>Welcome <span th:text="${username}"></span> !</b></h1>
+
+</div>
+</body>
+
+</html>
+

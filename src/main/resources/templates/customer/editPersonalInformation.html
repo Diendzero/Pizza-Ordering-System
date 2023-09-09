@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Edit Personal Information</title>
+    <link rel="stylesheet" href="/static/css/customer/editPersonalInformation.css">
+
+    <script>
+        function clearInput(input) {
+            input.value = '';
+        }
+
+        function inputFocus(input, defaultValue) {
+            if (input.value === defaultValue) {
+                clearInput(input);
+            }
+        }
+
+        function inputBlur(input, defaultValue) {
+            if (input.value.trim() === '') {
+                input.value = defaultValue;
+            }
+        }
+
+        function submitForm() {
+            var form = document.getElementById("editForm");
+            var formData = new FormData(form);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", form.action, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var messageBox = document.getElementById("messageBox");
+                    messageBox.style.display = "block";
+
+                    setTimeout(function () {
+                        window.location.href = "[[@{/menu/personalCenter/personalMainpage}]]";
+                    }, 2000);
+                }
+
+
+            };
+            xhr.send(formData);
+        }
+
+        function showPhoneNumberAlert() {
+            alert("You can not change your personal phone number!");
+        }
+
+
+    </script>
+
+</head>
+<body th:style="'background-image: url(/pngs/background.png)'">
+
+<div class="sidebar">
+    <a th:href="@{/menu}">Menu Page</a>
+    <a th:href="@{/menu/shoppingcart}">Shopping Cart</a>
+    <a th:href="@{/menu/personalCenter/personalMainpage}">Personal Center</a>
+    <a th:href="@{/logout}">Log Out</a>
+</div>
+<h1 style="text-align: center">Edit Personal Information</h1>
+
+<form id="editForm" th:action="@{/menu/personalCenter/editPersonalInformation}" method="post" class="form-container">
+
+    <table>
+        <tr>
+            <th><label for="username">Username</label></th>
+            <td><input type="text" id="username" name="username" th:value="${username}"
+                       onfocus="inputFocus(this, this.defaultValue)" onblur="inputBlur(this, this.defaultValue)"></td>
+
+        </tr>
+        <tr>
+            <th><label for="password">Input your New Password</label></th>
+            <td><input type="password" id="password" name="password"
+                       onfocus="inputFocus(this, this.defaultValue)" onblur="inputBlur(this, this.defaultValue)"></td>
+        </tr>
+        <tr>
+            <th><label for="user-phone">User Phone Number</label></th>
+            <td><input type="text" id="user-phone" name="user_phone" th:value="${phonenumber}"
+                       onclick="showPhoneNumberAlert()" readonly></td>
+        </tr>
+    </table>
+
+    <div class="button-container">
+        <a th:href="@{/menu/personalCenter/personalMainpage}" class="button">Cancel</a>
+        <button type="button" onclick="submitForm()">Apply</button>
+    </div>
+
+    <div id="messageBox"
+         style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+         background-color: white; padding: 20px; border: 1px solid black; border-radius: 5px; z-index: 1000;">
+        <p>You have changed your personal information successfully, the page will back to Login Page in few
+            seconds.</p>
+    </div>
+
+</form>
+</body>

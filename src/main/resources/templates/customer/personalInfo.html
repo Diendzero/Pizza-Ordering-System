@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Personal Information</title>
+    <link rel="stylesheet" href="/static/css/customer/personalInfo.css">
+</head>
+
+<body th:style="'background-image: url(/pngs/background.png)'">
+    <div class="sidebar">
+        <a th:href="@{/menu}">Menu Page</a>
+        <a th:href="@{/menu/shoppingcart}">Shopping Cart</a>
+        <a th:href="@{/menu/personalCenter/personalMainpage}">Personal Center</a>
+        <a th:href="@{/logout}">Log Out</a>
+    </div>
+<h1 style="text-align: center">Edit Personal Information</h1>
+
+<form th:action="@{/apply_changes}" method="post" class="form-container">
+    <table>
+        <tr>
+            <th><label for="user-id">User ID</label></th>
+            <td><input type="text" id="user-id" name="user_id"></td>
+        </tr>
+        <tr>
+            <th><label for="user-name">User Name</label></th>
+            <td><input type="text" id="user-name" name="user_name"></td>
+        </tr>
+        <tr>
+            <th><label for="user-phone">User Phone Number</label></th>
+            <td><input type="text" id="user-phone" name="user_phone"></td>
+        </tr>
+    </table>
+    <div class="button-container">
+        <button type="button" onclick="window.location.href='/menu/personalCenter/mainPage'">Cancel</button>
+        <button type="button" onclick="alert('You have changed your personal information successfully!')">Apply</button>
+    </div>
+</form>
+</body>

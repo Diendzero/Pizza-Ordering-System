@@ -1,0 +1,220 @@
+@CHARSET "UTF-8";
+
+body {
+    overflow: auto;
+}
+
+@font-face {
+    font-family: "汉仪文黑";
+    src: url("../font/zh-cn.ttf");
+}
+
+div {
+    margin: auto;
+}
+
+* {
+    margin: 0;
+    font-family: "汉仪文黑";
+    box-sizing: border-box;
+}
+
+.login_main_body {
+    background: url("../pngs/registerBackground_2048x1439.jpg") no-repeat;
+    background-size: cover;
+    background-attachment: scroll;
+    margin-top: 0;
+    height: 100vh;
+    overflow-y: scroll;
+}
+
+.login_form {
+    max-width: 580px;
+    margin-top: 12%;
+    margin-bottom: auto;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 25px 25px 25px 25px;
+    border: 0px solid #fff;
+    box-shadow: 10px 10px 10px 10px #969696;
+    background-color: #fff;
+}
+
+.login_form .login_form_head1 {
+    background-color: #bbdefb;
+    border: 0px solid #fff;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 25px 25px 0 0;
+    display: flex;
+}
+
+.login_form .login_form_head1 .login_form_head1_div {
+    margin: auto;
+    padding-top: 2%;
+    padding-bottom: 1%;
+}
+
+.login_form .login_form_head1 .login_form_head1_div .login_form_head1_word {
+    padding-top: 2%;
+    font-size: 25px;
+    color: white;
+}
+
+.login_form .login_form_head1 .login_form_head1_div {
+    padding-top: 0px;
+}
+
+.login_form .login_form_head2 {
+    justify-content: center;
+    align-items: flex-end;
+    background: #bbdefb;
+    border-radius: 0 0 0 0;
+    display: flex;
+    flex-wrap: nowrap;
+    position: relative;
+}
+
+.login_form .login_form_head2 .login_form_home_href_a1 {
+    color: white;
+    background: #54aff9;
+    padding: 3px 1.5em 2px 1.5em;
+    border-radius: 0 10px 0 0;
+    box-shadow: 0 0 5px 0px #969696;
+}
+
+.login_form .login_form_head2 .login_form_logo_div {
+    background: #bbdefb;
+    position: center;
+}
+
+.login_form .login_form_head2 .login_form_logo_div .login_form_logo {
+    max-width: 80px;
+    vertical-align: middle;
+    horiz-align: center;
+}
+
+.login_form .login_form_head2 .login_form_home_href_a2 {
+    color: white;
+    background: #54aff9;
+    padding: 3px 1.5em 2px 1.5em;
+    border-radius: 10px 0 0 0px;
+    box-shadow: 0 0 5px 0px #969696;
+    text-align: center;
+}
+
+.login_form .form_body {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    border-radius: 0 0 0 0;
+}
+
+.input_container {
+    position: relative;
+    width: 400px;
+    margin-bottom: 20px;
+}
+
+.itxt {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    border: 2px solid #cccccc;
+    border-radius: 25px;
+    background-color: transparent;
+    transition: border-radius 0.3s, border-color 0.3s;
+    outline: none;
+}
+
+.itxt:focus {
+    border-color: #007bff;
+    border-radius: 5px;
+}
+
+.itxt + label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #999;
+    transition: top 0.3s, font-size 0.3s, color 0.3s;
+}
+
+.itxt:focus + label,
+.itxt:not(:placeholder-shown) + label {
+    top: -10px;
+    font-size: 12px;
+    color: #007bff;
+}
+
+.role_decoration {
+    margin-left: 40px;
+}
+
+.submit_button {
+    display: block;
+    margin: 20px auto;
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #54aff9;
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s;
+}
+
+.submit_button:hover {
+    background-color: #4994d1;
+    border-radius: 8px;
+}
+
+.form_bottom {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    border-radius: 0 0 0 0;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    border-color: red;
+    display: inline;
+}
+
+.success {
+    color: green;
+}
+
+.form .itxt {
+    float: none;
+    font-size: 14px;
+    height: 18px;
+    line-height: 18px;
+    overflow: hidden;
+    padding: 10px 0 10px 10px;
+    width: 250px;
+    border: 1px #e3e3e3 solid;
+}
+
+@media screen and (max-width: 1920px) {
+    .login_main_body {
+        background: url("../pngs/registerbackground_1920x1080.jpg") no-repeat;
+        background-size: cover;
+        background-attachment: scroll;
+        margin-top: 0;
+        height: 80vh;
+        overflow: scroll;
+    }
+
+}

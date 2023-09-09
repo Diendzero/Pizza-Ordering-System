@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <script src="../../static/js/orderdetail.js"></script>
+    <title>Order</title>
+    <link rel="stylesheet" href="../../static/css/customer/orderdetail.css">
+</head>
+
+<body>
+<div class="left-side"></div>
+<div class="right-side"></div>
+<div class="left-line"></div>
+<div class="right-line"></div>
+
+
+<div class="card mt-50 mb-50">
+    <div class="col d-flex justify-content-between align-items-center">
+        <button class="cancel-btn"><a th:href="@{/menu/shoppingcart}">cancel</a></button>
+        <span class="text-muted" id="orderno" style="float: right;">
+            <div th:text="'OrderId  # ' + ${orderId}"></div>
+        </span>
+    </div>
+
+    <div class="gap">
+        <div class="col-2 d-flex mx-auto"></div>
+    </div>
+
+    <div class="title mx-auto">
+        Order_Details
+    </div>
+    <hr>
+
+    <div class="main"> <span id="sub-title">
+                </span>
+
+        <div class="row row-main">
+
+
+            <form th:action="@{/menu/orderdetails/chooseAddr}" method="GET">
+                <input type="hidden" name="orderId" th:value="${orderId}">
+                <button style="color:white; background-color: rgb(3, 122, 219);" type="submit">Choose My Address</button>
+            </form>
+
+            <hr>
+
+            <div class="container">
+                <table>
+                    <tbody>
+                    <tr th:each="item : ${orderdetailList}">
+                        <td>
+                            <span th:text="${item.pizzaName} +' * '+${item.pizzaNumber}"></span>
+                            <br>
+                            <span th:text="[+${item.pizzaBase}+]" style="font-size: 80%;"></span>
+                        </td>
+                        <td>
+                            <span th:text="'¥' + ${item.unitPrice}"></span>
+                            <br>
+                            <span th:text="[+${item.pizzaSize} + ' inches'+]" style="font-size: 80%;"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+            <hr>
+            <div class="row row-main">
+                <div class="col-6">
+                    <div class="row d-flex" style="margin-top: -30px;margin-left: 50px;">
+                        <span style="float: right; font-size: 200%;"><p><b>-10</b></p></span>
+                        <p style="font-size: 18px;"><b>Coupon</b></p>
+
+                    </div>
+                    <div class="row d-flex" style="margin-left: 50px;">
+                        <p class="text-muted">First order discount</p>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="total" style="margin-left: 50px;">
+                <div class="row">
+                    <span style="float: right;font-size: 18px;"><p><b><strong
+                            th:text="'¥' + ${totalamount}"></b></p></span>
+                    <div class="col"><b> Total:</b></div>
+
+                    <!-- <div class="col d-flex justify-content-end"> <b>$31</b> </div> -->
+                </div>
+
+                <style>
+                    #error-message {
+                        display: none;
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        padding: 20px;
+                        background-color: #f44336;
+                        color: white;
+                        text-align: center;
+                        font-size: 20px;
+                    }
+                </style>
+
+                <div id="error-message">Required option not completed, please complete the selection!</div>
+
+                <form id="orderForm" th:action="@{/menu/payment}" method="get">
+                    <input type="hidden" name="orderId" th:value="${orderId}">
+                    <input type="hidden" id="addrId" th:value="${addrId}">
+                    <button class="btn d-flex mx-auto" onclick="return submitOrder()">Submit my order</button>
+                </form>
+
+                <script>
+                    function submitOrder() {
+                        var addrId = document.getElementById("addrId").value;
+                        if (addrId == 0) {
+                            var errorMessage = document.getElementById("error-message");
+                            errorMessage.style.display = "block";
+                            setTimeout(function () {
+                                errorMessage.style.display = "none";
+                            }, 3000);
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                </script>
+
+
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+
+</body>
+</html>

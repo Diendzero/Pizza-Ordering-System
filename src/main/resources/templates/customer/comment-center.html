@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/static/css/customer/orderdetail.css">
+    <meta charset="UTF-8">
+    <title>Comment Center</title>
+    <script>
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this comment?');
+        }
+    </script>
+</head>
+
+<style>
+    th, td {
+        padding: 10px;
+        text-align: center;
+        padding-left: -120px;
+        padding-right: -120px;
+    }
+    td div {
+        display: inline-block;
+        text-align: left;
+        width: 100%;
+      }
+    
+    th {
+        background-color: #c4c4c4;
+        color: #e4e1e1;
+    }
+    
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .rating {
+        unicode-bidi: bidi-override;
+        direction: rtl;
+        text-align: center;
+    }
+
+    .rating > span {
+        display: inline-block;
+        position: relative;
+        width: 1.1em;
+    }
+
+    .rating > span:before {
+       content: "\2605";
+       position: absolute;
+       color: blue;
+    }
+
+    table {
+        margin-left: -40px; /* 向左移动100像素 */
+    }
+    tbody {
+        border: 2px solid rgb(3, 122, 219); /* 添加蓝色边框 */
+    }
+    hr {
+        margin: 1rem -1vh;
+        border-top: 3px solid rgb(3, 122, 219);
+    }
+</style>
+<body>
+
+    <div class="left-side"></div>
+    <div class="right-side"></div>
+
+    <div class="left-line"></div>
+    <div class="right-line"></div>
+
+    <div class="card mt-50 mb-50">
+
+    <h1 style="margin-left: 100px;">Comment Center</h1>
+    <button class="cancel-btn" onclick="window.location.href='/menu/personalCenter/orders'">cancel</button>
+    <table>
+      <th:block th:each="comment : ${comments}">
+        <tr>
+            <td>OrderID:<span th:text="${comment.orderId}"></span></td>
+            <td></td>
+            <!-- <td colspan="2" style="text-align:right;">OrderTime:<span>4/22</span></td> -->
+            <td colspan="2" style="text-align:right;">OrderTime:<span th:text="${creationTimes[comment.orderId]}"></span></td>
+        </tr>
+        <tr>
+            <td colspan="4" style="text-align:center;">"<span th:text="${comment.content}"></span>"</td>
+        </tr>
+        <tr>
+            <td>Rating:</td>
+            <td><div class="rating">
+                <th:block th:if="${comment.rating >= 5}"><span></span></th:block>
+                <th:block th:if="${comment.rating >= 4}"><span></span></th:block>
+                <th:block th:if="${comment.rating >= 3}"><span></span></th:block>
+                <th:block th:if="${comment.rating >= 2}"><span></span></th:block>
+                <th:block th:if="${comment.rating >= 1}"><span></span></th:block>
+            </div></td>
+            <td></td>
+            <td style="text-align:right;">
+                <form th:action="@{/menu/personalCenter/orders/comment-center/delete/{id}(id=${comment.id})}" method="post" onsubmit="return confirmDelete()">
+                    <button type="submit" style="color:black; background-color: darkgray;">Delete</button>
+                </form>
+            </td>
+        </tr>
+
+        <tr><td colspan="4"><hr></td></tr>
+
+      </th:block>
+
+    </table>
+
+    </div>
+</body>
+</html>

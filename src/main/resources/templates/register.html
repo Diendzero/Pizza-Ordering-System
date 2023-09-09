@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <base th:href="@{/}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" th:href="@{/static/css/register.css}">
+
+    <script>
+        async function validateUsername() {
+            const usernameInput = document.getElementById('username'); <!--g-->
+            const usernameError = document.getElementById('usernameError');
+            const usernameSuccess = document.getElementById('usernameSuccess');
+            const invalidChars = /[-/*]/;
+            const maxLength = 15;
+
+            if (invalidChars.test(usernameInput.value)) {
+                usernameError.innerText = "Username cannot contain the special symbols such as “-/*”";
+                usernameInput.style.borderColor = "red";
+                usernameSuccess.style.display = "none";
+                return false;
+            }
+
+            if (usernameInput.value.length > maxLength) {
+                usernameError.innerText = "The length of username should be less than 20"; <!--r-->
+                usernameInput.style.borderColor = "red";
+                usernameSuccess.style.display = "none";
+                return false;
+            }
+
+            if (usernameInput.value === '') {
+                usernameError.innerText = "This field must not be null";
+                usernameInput.style.borderColor = "red";
+                usernameSuccess.style.display = "none";
+                return false;
+            }
+
+            try {
+                const url = `/checkUsernameExists?username=${encodeURIComponent(usernameInput.value)}`;
+                const result = await fetchAPI(url);
+                if (result.usernameExists) {
+                    usernameError.innerText = "This username has been registered";
+                    usernameInput.style.borderColor = "red";
+                    usernameSuccess.style.display = "none";
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                usernameError.innerText = "An error occurred while checking the username";
+                usernameInput.style.borderColor = "red";
+                usernameSuccess.style.display = "none";
+                return false;
+            }
+
+            usernameError.innerText = "";
+            usernameInput.style.borderColor = "";
+            usernameSuccess.style.display = "inline";
+            return true;
+        }
+
+        function validatePassword() {
+            const passwordInput = document.getElementById('password');
+            const passwordError = document.getElementById('passwordError');
+            const passwordSuccess = document.getElementById('passwordSuccess');
+            const invalidChars = /[-/*]/;
+            const maxLength = 15;
+            const minLength = 5;
+
+            if (passwordInput.value.length > maxLength || passwordInput.value.length < minLength) {
+                passwordError.innerText = "The length of password should be between 5 and 15";
+                passwordInput.style.borderColor = "red";
+                passwordSuccess.style.display = "none";
+                return false;
+            }
+
+            if (invalidChars.test(passwordInput.value)) {
+                passwordError.innerText = "Password cannot contain the special symbols such as “-/*”";
+                passwordInput.style.borderColor = "red";
+                passwordSuccess.style.display = "none";
+                return false;
+            }
+
+            if (passwordInput.value === '') {
+                passwordError.innerText = "This field must not be null";
+                passwordInput.style.borderColor = "red";
+                passwordSuccess.style.display = "none";
+                return false;
+            }
+
+            passwordError.innerText = "";
+            passwordInput.style.borderColor = "";
+            passwordSuccess.style.display = "inline";
+            return true;
+        }
+
+        function validateRePassword() {
+            const passwordInput = document.getElementById('password'); <!--o-->
+            const repasswordInput = document.getElementById('repassword');
+            const repasswordSuccess = document.getElementById('repasswordSuccess');
+            const repasswordError = document.getElementById('repasswordError');
+
+            if (passwordInput.value !== repasswordInput.value) {
+                repasswordError.innerText = "The repassword is different from the password above";
+                repasswordInput.style.borderColor = "red";
+                repasswordSuccess.style.display = "none";
+                return false;
+            }
+
+            if (repasswordInput.value === '') {
+                repasswordError.innerText = "This field must not be null";
+                repasswordInput.style.borderColor = "red";
+                repasswordSuccess.style.display = "none";
+                return false;
+            }
+
+            repasswordError.innerText = "";
+            repasswordInput.style.borderColor = "blue";
+            repasswordSuccess.style.display = "inline";
+            return true;
+        }
+
+        async function validatePhoneNumber() {
+            const phoneNumberInput = document.getElementById('phoneNumber');
+            const phoneNumberError = document.getElementById('phoneNumberError');
+            const phoneNumberSuccess = document.getElementById('phoneNumberSuccess');
+
+            if (phoneNumberInput.value === '') { <!--u-->
+                phoneNumberError.innerText = "Input your phone";
+                phoneNumberInput.style.borderColor = "red";
+                phoneNumberSuccess.style.display = "none";
+                return false;
+            }
+
+            try {
+                const url = `/checkPhoneNumberExists?phoneNumber=${encodeURIComponent(phoneNumberInput.value)}`;
+                const result = await fetchAPI(url);
+                if (result.phoneNumberExists) {
+                    phoneNumberError.innerText = "This phone number has been registered";
+                    phoneNumberInput.style.borderColor = "red";
+                    phoneNumberSuccess.style.display = "none";
+                    return false;
+                } else {
+                    phoneNumberError.innerText = "";
+                    phoneNumberInput.style.borderColor = "";
+                    phoneNumberSuccess.style.display = "inline";
+                    return true;
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                phoneNumberError.innerText = "An error occurred while checking the phoneNumber";
+                phoneNumberInput.style.borderColor = "red";
+                phoneNumberSuccess.style.display = "none";
+                return false;
+            }
+        }
+
+        function validateRole() {
+            const roleAdministratorInput = document.getElementById('role_administrator');
+            const roleUserInput = document.getElementById('role_user');
+            const roleError = document.getElementById('roleError');
+            const roleContainer = document.querySelector('.input_container > label');
+
+            if (!roleAdministratorInput.checked && !roleUserInput.checked) {
+                roleError.innerText = "Please choose one";
+                roleContainer.style.color = "red";
+                return false;
+            }
+
+            roleContainer.style.color = "";
+            if (document.getElementById('roleError')) {
+                roleError.remove();
+            }
+            roleContainer.style.display = "none";
+
+            return true;
+        }
+
+        async function validateForm(event) {
+            event.preventDefault();
+            var popupImage = document.getElementById("pop_up_image");
+            const isValid =
+                await validateUsername() &&
+                validatePassword() &&
+                validateRePassword() &&
+                await validatePhoneNumber() &&
+                await ValidateCodeButton() &&
+                validateRole(); <!--p-->
+
+            if (isValid) {
+                popupImage.src = "../static/pngs/success_register_pic.png"
+                show_pop_up_window("Register success, and you can use this account! Click the button to go to the Home page.", true);
+            } else {
+                popupImage.src = "../static/pngs/fail_register_pic.png"
+                show_pop_up_window("Register not success. The inputs of some fields are not correct, please check them again.", false);
+            }
+
+        }
+
+        function show_pop_up_window(message, isSuccess) {
+            const pop_up_window = document.getElementById("pop_up_window");
+            const i_know_button = document.getElementsByClassName("i_know_button")[0];
+            const pop_up_windowMessage = document.getElementById("pop_up_window_message");
+
+            pop_up_windowMessage.innerText = message;
+            pop_up_window.style.display = "block";
+
+            i_know_button.onclick = function () {
+                pop_up_window.style.display = "none";
+                if (isSuccess) {
+                    document.getElementById("register_form").submit();
+                }
+            }
+        }
+
+        function SendCodeButton() {
+            const phoneNumberInput = document.getElementById('phoneNumber');
+
+            const result = fetch(`/sendSms/${phoneNumberInput.value}`);
+            if (result) {
+                SendCodeSuccess.style.display = "inline";
+                SendCodeError.style.display = "none";
+            } else {
+                SendCodeError.innerText = "Send failure!";
+                SendCodeError.style.display = "inline";
+                SendCodeSuccess.style.display = "none";
+            }
+
+            startCountdown();
+        }
+
+        async function ValidateCodeButton() {
+            const codeInput = document.getElementById('code').value;
+            const phoneNumberInput = document.getElementById('phoneNumber').value;
+
+            try {
+                const response = await fetch("/verifyCode", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({phoneNumberInput, code: codeInput})
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.result) {
+                        codeSuccess.style.display = "inline";
+                        codeError.style.display = "none";
+                        return true;
+                    } else {
+                        codeError.innerText = "Input code not match sent code!";
+                        codeError.style.display = "inline";
+                        codeSuccess.style.display = "none";
+                        return false;
+                    }
+                } else {
+                    throw new Error(`An error occurred: ${response.statusText}`);
+                }
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        function startCountdown() {
+            var countdownElem = document.getElementById("countdown");
+            var getCodeBtn = document.getElementById("get_code");
+            var timeLeft = 60;
+
+            countdownElem.style.display = "inline";
+            countdownElem.innerHTML = timeLeft + "s";
+            getCodeBtn.disabled = true;
+            getCodeBtn.style.backgroundColor = "#ccc";
+
+            var countdownInterval = setInterval(function () {
+                timeLeft--;
+                countdownElem.innerHTML = timeLeft + "s";
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownElem.style.display = "none";
+                    getCodeBtn.disabled = false;
+                    getCodeBtn.style.backgroundColor = "#54aff9";
+                }
+            }, 1000);
+        }
+
+
+        async function fetchAPI(url) {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`An error occurred: ${response.statusText}`);
+            }
+            return await response.json();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var verificationHelp = document.querySelector('.verification_help');
+            if (verificationHelp) {
+                verificationHelp.addEventListener('click', function () {
+                    this.classList.toggle('clicked');
+                });
+            }
+        });
+
+    </script>
+
+</head>
+
+<body th:class="register_main_body">
+
+<div th:class="register_form">
+    <!--You are not allowed to use all the codes because of the copyright.
+    If we find any suspicious action, we will report to module leader immediately.-->
+    <div th:class="register_form_head1">
+        <div th:class="register_form_head1_div">
+            <h1 th:class="register_form_head1_word">Welcome to register your new account!</h1>
+        </div>
+    </div>
+
+    <div th:class="register_form_head2">
+        <a th:class="register_form_home_href_a1" th:href="login">
+            <div>Home</div>
+        </a>
+
+        <div th:class="register_form_logo_div">
+            <img th:class="register_form_logo" src="../static/pngs/pizza.png" alt="Pizza"> <!--2-->
+        </div>
+
+        <a th:class="register_form_home_href_a2" th:href="login">
+            <div>Login</div>
+        </a>
+    </div>
+
+    <div th:class="form_body">
+        <form id="register_form" th:action="@{/register}" method="post" onsubmit="validateForm(event)">
+            <div th:class="input_container">
+                <input th:class="itxt" type="text" placeholder=" "
+                       autocomplete="off" tabindex="1" name="username" id="username" oninput="validateUsername()"/>
+                <label for="username">Username</label>
+                <span id="usernameError" class="error"></span>
+                <span id="usernameSuccess" class="success" style="display: none;">✓</span>
+            </div>
+
+            <div th:class="input_container">
+                <input th:class="itxt" type="password" placeholder=" "
+                       autocomplete="off" tabindex="1" name="password" id="password" oninput="validatePassword()"/>
+                <label for="password">Password</label>
+                <span id="passwordError" class="error"></span>
+                <span id="passwordSuccess" class="success" style="display: none;">✓</span>
+            </div>
+
+            <div th:class="input_container"> <!--0-->
+                <input th:class="itxt" type="password" placeholder=" "
+                       autocomplete="off" tabindex="1" name="repassword" id="repassword"
+                       oninput="validateRePassword()"/>
+                <label for="repassword">Input your password again</label>
+                <span id="repasswordError" class="error"></span>
+                <span id="repasswordSuccess" class="success" style="display: none;">✓</span>
+            </div>
+
+            <div th:class="input_container" th:classappend="flex_container">
+                <div>
+                    <input th:class="itxt" th:classappend="itxt_phone" type="text" placeholder=" "
+                           autocomplete="off" tabindex="1" name="phoneNumber" id="phoneNumber"
+                           oninput="validatePhoneNumber()"/>
+                    <label for="phoneNumber">Phone Number</label>
+                    <span id="phoneNumberError" class="error"></span>
+                    <span id="phoneNumberSuccess" class="success" style="display: none;">✓</span>
+                </div>
+
+                <div>
+                    <input type="button" value="Obtain Verification Code" th:class="get_verification_code_button"
+                           id="get_code" onclick="SendCodeButton()"/>
+                    <span id="countdown" class="countdown_timer" style="display: none;"></span>
+                    <span id="SendCodeError" class="error"></span>
+                    <span id="SendCodeSuccess" class="success_for_code" style="display: none;">later to try!</span>
+                </div>
+            </div>
+
+            <div th:class="input_container">
+                <input th:class="itxt" type="text" name="code" placeholder=" " id="code"
+                       oninput="ValidateCodeButton()"/>
+                <label for="code">Verification Code</label>
+                <span id="codeError" class="error"></span>
+                <span id="codeSuccess" class="success" style="display: none;">✓</span>
+            </div>
+
+            <div th:class="input_container" th:classappend="input_container_for_role">
+                <label>Role:</label>
+                <input type="radio" name="role" value="Manager" id="role_administrator"
+                       class="role_decoration" oninput="validateRole()"/>
+                Manager
+                <input type="radio" name="role" value="Customer" id="role_user"
+                       class="role_decoration" oninput="validateRole()"/> Customer
+                <br>
+                <span id="roleError" class="error"></span>
+            </div>
+
+            <div class="input_container flex_container input_container_for_form_bottom">
+                <div>
+                    <input type="submit" value="Register" th:class="submit_button" onclick="return validateForm()"/>
+                </div>
+
+                <div>
+                    <span th:class="verification_help">Can't get Verification Code?</span>
+                    <div th:class="tooltip">Please click the "Get Verification Code" again!</div>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+    <div th:class="form_bottom">
+            <span>
+                <p>PizzaOrder.Copyright &copy;2023</p>
+            </span>
+    </div>
+
+</div>
+
+<div id="pop_up_window" th:class="pop_up_window">
+    <div th:class="pop_up_window_content">
+        <div th:class="pop_up_window_content_head">
+            <img th:class="warning_logo" src="../static/pngs/warning.png" alt="Warning">
+            <span th:class="warning_text">Information</span>
+        </div>
+
+        <div th:class="pop_up_window_content_body">
+            <div>
+                <img id="pop_up_image" class="pop_up_image" alt="popUpWindowPic">
+            </div>
+
+            <div>
+                <p id="pop_up_window_message" th:class="pop_up_window_message"></p>
+            </div>
+        </div>
+
+        <div th:class="i_know_button_div">
+            <div>
+                <span th:class="i_know_button"><button>I know</button></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

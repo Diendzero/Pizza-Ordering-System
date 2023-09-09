@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Shopping Cart</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/customer/showShoppingCart.css">
+</head>
+
+<body th:style="'background-image: url(/pngs/background.png)'">
+    <script>
+        function del() {
+            var msg = "Are you sure you want to remove all the products？";
+            if (confirm(msg)==true){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    </script> 
+
+    <script th:inline="javascript">
+        function addNumber(itemId) {
+            var itemNum = document.getElementById(itemId).value;
+            if (itemNum > 1000) {
+                var upperLimitTip = document.getElementById("upperLimitTip");
+                upperLimitTip.style.display = "block";
+                setTimeout(function () {
+                    upperLimitTip.style.display = "none";
+                }, 3000);
+                return false;
+            } else {
+                return true;
+            }
+        }
+    </script>
+
+    <div class="sidebar">
+        <a th:href="@{/menu}">Menu Page</a>
+        <a th:href="@{/menu/shoppingcart}">Shopping Cart</a>
+        <a th:href="@{/menu/personalCenter/personalMainpage}">Personal Center</a>
+        <a th:href="@{/logout}">Log Out</a>
+    </div>
+    
+    <div class="main-content">
+        <h1>Shopping Cart</h1>
+
+        <div class="container">
+            <div th:if="${emptycart == null}">
+                 <form th:action="@{/menu/shoppingcart}" method="post">
+                    <input type="hidden" name="phoneNumber" th:value="${phoneNumber}">
+                    <input type="hidden" name="action" th:value="emptycart">
+                    <button type="submit" class="emptycart-enabled" onclick="return del()">Empty Cart</button>
+                </form>
+            </div>
+
+            <div th:if="${emptycart}">
+                <button class="emptycart-disabled" disabled>Empty Cart</button>
+            </div>      
+            
+            <table>
+                <thead>
+                <tr>
+                    <th>Pizza Name</th>
+                    <th>Pizza Base</th>
+                    <th>Pizza Size</th>
+                    <th>Pizza Number</th>
+                    <th>Unit Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${shoppingcartlist}">
+                    <td th:text="${item.pizzaName}"></td>
+                    <td th:text="${item.pizzaBase}"></td>
+                    <td th:text="${item.pizzaSize} + ' inches'"></td>
+                    <td>
+                        <div class="num-container">
+                            <form th:action="@{/menu/shoppingcart}" method="post">
+                                <input type="hidden" name="action" th:value="editnum">
+                                <input type="hidden" name="id" th:value="${item.id}"/>
+                                <input type="hidden" th:id="${item.id}" name="num" th:value="${item.pizzaNumber + 1}">
+                                <button type="submit" th:onclick="javascript:return addNumber('[[${item.id}]]')">+</button>
+                            </form>
+                            <span th:text="${item.pizzaNumber}"></span>
+                            <form th:action="@{/menu/shoppingcart}" method="post">
+                                <input type="hidden" name="action" th:value="editnum">
+                                <input type="hidden" name="id" th:value="${item.id}"/>
+                                <button type="submit" name="num" th:value="${item.pizzaNumber - 1}">-</button>
+                            </form>
+                        </div>
+                    </td>
+                    <td th:text="'¥' + ${item.unitPrice}"></td>
+                </tr>
+                <tr>
+                    <td colspan="4"><strong th:text="'Total (' + ${totalnum} + ' pizzas)'"></strong></td>
+                    <td><strong th:text="'¥' + ${totalamount}"></strong></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div th:if="${emptycart == null}">
+                <form th:action="@{/menu/shoppingcart}" method="post">
+                    <input type="hidden" name="phoneNumber" th:value="${phoneNumber}">
+                    <input type="hidden" name="action" th:value="startorder">
+                    <button type="submit" class="startorder-enabled">Start an Order</button>
+                </form>
+            </div>
+
+            <div th:if="${emptycart != null}">
+                <button class="startorder-disabled" disabled>Start an Order</button>
+            </div>
+        </div>
+
+        <div th:if="${emptycart}">
+            <h2 th:text="${emptycart}"></h2>
+        </div>
+
+         <h3 id="upperLimitTip">Unable to add more!</h3>
+    </div>
+</body>
+</html>
+
+	
+
+	
+
+	
+
+	

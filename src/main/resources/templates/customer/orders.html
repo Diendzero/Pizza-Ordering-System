@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Orders</title>
+    <link rel="stylesheet" href="../../static/css/customer/orders.css">
+    <script>
+        function showTable(idToShow) {
+            var uncompletedOrdersTable = document.getElementById("uncompletedOrdersTable");
+            var historicalOrdersTable = document.getElementById("historicalOrdersTable");
+            if (idToShow === "uncompletedOrdersTable") {
+                uncompletedOrdersTable.style.display = "block";
+                historicalOrdersTable.style.display = "none";
+            } else {
+                uncompletedOrdersTable.style.display = "none";
+                historicalOrdersTable.style.display = "block";
+            }
+        }
+
+        function togglePlaceholder(input) {
+
+            if (input.value === "") {
+                input.placeholder = "You can search your orderID";
+            } else {
+                input.placeholder = "";
+            }
+
+        }
+        
+        function openModal() {
+            var modal = document.getElementById("filterModal");
+            modal.style.display = "block";
+        }
+        
+        function closeModal() {
+            var modal = document.getElementById("filterModal");
+            modal.style.display = "none";
+        }
+
+        function filterOrders(period) {
+            closeModal();
+            // 根据所选时间范围构建查询参数
+            var queryParam = "?period=" + period;
+            // 重定向到新的URL
+            window.location.href = "/menu/personalCenter/orders"
+        }
+
+        // 点击窗口外的任何地方关闭模态框
+        window.onclick = function (event) {
+            var modal = document.getElementById("filterModal");
+            if (event.target == modal) {
+                closeModal();
+            }
+        };
+
+        function searchOrderById() {
+
+            // 获取用户输入的 Order ID
+            var orderId = document.getElementById("searchInput").value;
+            
+            // 检查输入是否为空或非数字
+            if (!orderId || isNaN(orderId)) {
+                alert("Please enter a valid Order ID.");
+                return;
+            }
+            
+            fetch('/personalCenter/orders/searchById/' + orderId)
+            .then(response => response.json())
+            .then(data => {
+                // 更新表格
+                var tableBody = document.querySelector("#uncompletedOrdersTable table tbody");
+                tableBody.innerHTML = "";
+                var newRow = tableBody.insertRow();
+                
+                newRow.insertCell().innerText = data.id;
+                newRow.insertCell().innerText = data.creationTime;
+                newRow.insertCell().innerText = data.paymentStatus;
+                newRow.insertCell().innerText = data.totalPrice;
+            })
+            
+            .catch(error => {
+                console.error('Error fetching order by ID:', error);
+                alert("Error fetching order. Please try again.");
+            });
+        }
+
+        function applySearch(inputId, tableId) {
+
+        var inputElement = document.getElementById(inputId);
+        var inputOrderId = inputElement.value;
+        var ordersTable = document.getElementById(tableId);
+        var orders = ordersTable.querySelectorAll("tr");
+
+        orders.forEach(function (order, index) {
+            if (index === 0) {
+                return; // Skip table header
+            }
+
+            var orderId = order.cells[0].innerText;
+            if (orderId === inputOrderId) {
+                order.style.display = "";
+            } else {
+                order.style.display = "none";
+            }
+        });
+        }
+
+
+        function viewOrderDetails(button) {
+            
+            console.log("View Order Details button clicked:", button, "Order ID:", orderId);
+            var orderId = button.getAttribute("data-order-id");
+            var orderDetailsUrl = "/menu/personalCenter/orders/" + orderId + "/items";
+            var xhr = new XMLHttpRequest();
+            
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        console.log(xhr.responseText);
+                        var orderItems = JSON.parse(xhr.responseText);
+                        displayOrderDetails(orderItems);
+                    } else {
+                        alert("Error fetching order details. Please try again");
+                    }
+                }
+            };
+            
+            xhr.open("GET", orderDetailsUrl, true);
+            xhr.send();
+        
+        }
+
+
+        function displayOrderDetails(orderItems) {
+    
+            var modalBody = document.querySelector(".modal-body");
+    
+            modalBody.innerHTML = ""; // 清空之前的内容
+
+    
+            orderItems.forEach(function (item) {
+    
+                fetchPizzaDetails(item.pizzaId, function (pizza) {
+    
+                    var itemInfo = document.createElement("div");
+    
+                    itemInfo.innerHTML = `
+    
+                    <p>Pizza: ${pizza.name}</p>
+    
+                    <p>Description: ${pizza.description}</p>
+    
+                    <p>Category: ${pizza.category}</p>
+    
+                    <p>Base: ${pizza.base}</p>
+    
+                    <p>Size: ${pizza.size}</p>
+    
+                    <hr>
+    
+                    `;
+    
+                    modalBody.appendChild(itemInfo);
+    
+                });
+    
+            });
+
+   
+            // 打开模态框
+   
+            var orderDetailsModal = document.getElementById("orderDetailsModal");
+   
+            orderDetailsModal.style.display = "block";
+
+        }
+
+
+
+        function fetchPizzaDetails(pizzaId, callback) {
+    
+            var pizzaDetailsUrl = "/menu/personalCenter/orders/pizzas/" + pizzaId;
+    
+            var xhr = new XMLHttpRequest();
+
+    
+            xhr.onreadystatechange = function () {
+    
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+    
+                    if (xhr.status === 200) {
+    
+                        var pizza = JSON.parse(xhr.responseText);
+    
+                        callback(pizza);
+    
+                    } else {
+    
+                        alert("Error fetching pizza details. Please try again");
+    
+                    }
+    
+                }
+    
+            };
+
+    
+            xhr.open("GET", pizzaDetailsUrl, true);
+    
+            xhr.send();
+
+        }
+
+        function closeOrderDetailsModal() {
+  
+            var orderDetailsModal = document.getElementById("orderDetailsModal");
+  
+            orderDetailsModal.style.display = "none";
+
+        }
+
+
+
+    </script>
+</head>
+<body th:style="'background-image: url(/pngs/background.png)'" onload="showTable('uncompletedOrdersTable')">
+
+    <div id="filterModal" class="modal">
+        <div class="modal-content">
+            <p>You can filtrate orders by time</p>
+            <div>
+                <button class="button-hover" onclick="filterOrders('1month')">in 1 month</button>
+                <button class="button-hover" onclick="filterOrders('6months')">in half year</button>
+                <button class="button-hover" onclick="filterOrders('1year')">in one year</button>
+            </div>
+            <button class="button-hover" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+    <div class="sidebar">
+        <a th:href="@{/menu}">Menu Page</a>
+        <a th:href="@{/menu/shoppingcart}">Shopping Cart</a>
+        <a th:href="@{/menu/personalCenter/personalMainpage}">Personal Center</a>
+        <a th:href="@{/logout}">Log Out</a>
+    </div>
+    <div class="content">
+        <h1>My Orders</h1>
+        <div class="num-container">
+            <form>
+                <button class="button-hover" type="button" onclick="showTable('uncompletedOrdersTable')">Uncompleted Orders</button>
+            </form>
+            <form>
+                <button class="button-hover" type="button" onclick="showTable('historicalOrdersTable')">Historical Orders</button>
+            </form>
+            <form action="/menu/personalCenter/orders/comment-center">
+                <button class="button-hover" type="submit">Comment Center</button>
+            </form>
+        </div>
+        <div id="uncompletedOrdersTable" style="display:none;">
+            <h2>Uncompleted Orders</h2>
+            <div class="table-container">
+                <div class="search-container">
+                    <input type="text" id="searchUncompletedInput" placeholder="You can search your orderID " onfocus="clearPlaceholder(this)">
+                    <button class="button-hover" type="button" onclick="applySearch('searchUncompletedInput', 'uncompletedOrdersTable')">Search</button>
+                    <button class="button-hover" type="button" onclick="openModal()">Filter</button>
+                </div>
+                <table>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Creation Time</th>
+                        <th>Payment Status</th>
+                        <th>Order Price</th>
+                    </tr>
+                    <!-- 未完成订单数据行 -->
+                    <tr th:each="order: ${UnpaidOrders}">
+                        <td th:text="${order.id}"></td>
+                        <td th:text="${order.creationTime}"></td>
+                        <td th:text="${order.paymentStatus}"></td>
+                        <td th:text="${order.totalPrice}"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id="historicalOrdersTable" style="display:none;">
+            <h2>Historical Orders</h2>
+            <div class="table-container">
+                <div class="search-container">
+                    <input type="text" id="searchHistoricalInput" placeholder="You can search product item name" onfocus="clearPlaceholder(this)">
+                    <button class="button-hover" type="button">Search</button>
+                    <button class="button-hover" type="button" onclick="openModal()">Filter</button>
+                </div>
+
+                <div id="orderDetailsModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            
+                            <h2>Order Details</h2>
+                        </div>
+                        <div class="modal-body"></div>
+                        <div class="modal-footer">
+                            <button class="button-hover" onclick="closeOrderDetailsModal()">Close</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="orderDetailsModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>Order Details</h2>
+                        </div>
+                        <div class="modal-body"></div>
+                        <div class="modal-footer">
+                            <button class="button-hover" onclick="closeOrderDetailsModal()">Close</button>
+                        </div>
+                    </div>
+                </div>
+
+                <table>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Creation Time</th>
+                        <th>Order Items</th>
+                        <th>Order Price</th>
+                        <th>Order Comment</th>
+                    </tr>
+                    <!-- 历史订单数据行 -->
+                    <tr th:each="order: ${PaidOrders}">
+                        <td th:text="${order.id}"></td>
+                        <td th:text="${order.creationTime}"></td>
+                        <td>
+                            <button class="button-hover" th:data-order-id="${order.id}" onclick="viewOrderDetails(this)">View Order Details</button>
+                        </td>
+                        <td th:text="${order.totalPrice}"></td>
+
+                        <td>
+                            <a th:href="@{/menu/personalCenter/orders/{orderId}/edit-comment(orderId=${order.id})}">
+                                <button class="button-hover">Edit-comment</button>
+                            </a>
+                        </td>
+
+                    </tr>
+                </table>
+
+                <script>
+                    function redirectToEditCommentPage(button) {
+                        var orderId = button.getAttribute("data-order-id");
+                        window.location.href = "/menu/personalCenter/orders/" + orderId + "/edit-comment";
+                    }
+                </script>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

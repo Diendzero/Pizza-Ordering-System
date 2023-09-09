@@ -1,0 +1,160 @@
+body {
+    font-family: Arial, sans-serif;
+    background-repeat: repeat;
+}
+
+.sidebar {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    padding: 20px;
+    width: 125px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #000;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: center;
+}
+
+.sidebar a:hover {
+    background-color: #ccc;
+}
+
+.main-content {
+    margin-left: 220px;
+    padding: 20px;
+    min-height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+h1 {
+    font-size: 50px;
+    margin-top: 80px;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.emptycart-enabled{
+    font-size: 18px;
+    width: 150px;
+    height: 50px;
+    background-color: #db5213;
+}
+
+.emptycart-disabled{
+    font-size: 18px;
+    width: 150px;
+    height: 50px;
+    background-color:#8e8d8d;
+    cursor: not-allowed;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #333;
+    color: #fff;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.num-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.num-container form {
+    margin: 0;
+    padding: 0;
+}
+
+.num-container form button {
+    background-color: #8e8d8d;
+}
+
+.num-container form:first-of-type button {
+    margin-right: 10px;
+}
+
+.num-container form:last-of-type button {
+    margin-left: 10px;
+}
+
+.startorder-enabled{
+    font-size: 18px;
+    width: 150px;
+    height: 50px;
+    background-color: #db5213;
+}
+
+.startorder-disabled{
+    font-size: 18px;
+    width: 150px;
+    height: 50px;
+    background-color: #8e8d8d;
+    cursor: not-allowed;
+}
+
+h2 {
+    font-size: 40px;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    color: #bb4914;
+}
+
+#upperLimitTip {
+    display: none;
+    padding: 20px;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    font-size: 20px;
+    background-color: #f44336;
+    color: white;
+}
+

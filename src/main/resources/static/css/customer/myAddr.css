@@ -1,0 +1,232 @@
+.body {
+    top: 5%;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(101, 186, 233);
+    left: 0;
+    z-index: 1;
+}
+
+.bodyForm {
+    top: 5%;
+    margin-left: 15%;
+    position: fixed;
+    width: 50%;
+    height: 100%;
+    background-color: white;
+    z-index: 3;
+    overflow: auto;
+    box-shadow: 5px 5px 5px gray;
+}
+
+.sideBox {
+    top: 5%;
+    margin-left: 66%;
+    position: fixed;
+    width: 18%;
+    height: 30%;
+    background-color: white;
+    z-index: 5;
+    overflow: auto;
+    box-shadow: 5px 5px 5px gray;
+}
+
+.helperBox {
+    top: 37%;
+    margin-left: 66%;
+    position: fixed;
+    width: 18%;
+    height: 50%;
+    background-color: white;
+    z-index: 3;
+    overflow: auto;
+    box-shadow: 5px 5px 5px gray;
+}
+
+.topBox {
+    top: 0;
+    position: fixed;
+    left: 0;
+    width: 100%;
+    height: 5%;
+    z-index: 4;
+    background-color: rgb(0, 103, 187);
+    box-shadow: 1px 1px 1px rgb(1, 68, 122);
+}
+
+.deleteTopBox {
+    top: 0;
+    position: fixed;
+    left: 0;
+    width: 100%;
+    height: 6%;
+    background-color: rgb(0, 103, 187);
+    box-shadow: 1px 1px 1px rgb(1, 68, 122);
+}
+
+.text {
+    margin-left: 0.5%;
+    margin-top: 0.4%;
+    color: white;
+}
+
+#moreText {
+    margin: 5%;
+    color: transparent;
+    text-align: center;
+    font-size: 24px;
+}
+
+.buttonAddDel {
+    background-color: transparent;
+    border: none;
+    width: 100%;
+    height: 20%;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: left;
+    padding-left: 12%;
+}
+
+.buttonForDel {
+    color: white;
+    background-color: transparent;
+    border: none;
+    width: 32.5%;
+    padding-top: 0.9%;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.buttonAddDel:hover {
+    background: linear-gradient(to right, rgba(128, 128, 128, 0.3) 40%, rgba(128, 128, 128, 0));
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.error {
+    color: black;
+}
+
+#deleteError {
+    display: none;
+    position: fixed;
+    margin-top: 6%;
+    left: 0;
+    width: 100%;
+    background-color: red;
+    color: white;
+    padding: 10px;
+    box-sizing: border-box;
+    transition: top 0.3s ease-out;
+}
+
+.success {
+    position: fixed;
+    top: 5%;
+    left: 0;
+    width: 100%;
+    background-color: rgb(0, 167, 8);
+    color: white;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.box {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 40px;
+    margin-bottom: 30px;
+    box-shadow: 3px 3px 3px gray;
+}
+
+.formBox {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 40px;
+    margin-bottom: 30px;
+    box-shadow: 3px 3px 3px gray;
+}
+
+.hidden-box {
+    background-color: #adadad;
+    display: none;
+    position: absolute;
+    right: -100px;
+    transition: right 0.5s;
+    z-index: 4;
+}
+
+.show-box {
+    display: block;
+    right: 0;
+}
+
+.default {
+    color: #adadad;
+}
+
+.blue-default {
+    color: blue;
+}
+
+#form {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50vw;
+    height: 100vh;
+    background-color: white;
+    z-index: 10;
+    overflow: auto;
+}
+
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9;
+}
+
+input {
+    height: 30px;
+    width: 30px;
+}
+
+#cube-container {
+    position: fixed;
+    left: 0;
+    width: 100%;
+    top: 5%;
+    height: 190%;
+    z-index: 2;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>menu</title>
+    <link rel="stylesheet" href="/static/css/customer/menu.css">
+</head>
+<body th:style="'background-image: url(/pngs/background.png)'">
+<div class="sidebar">
+    <a th:href="@{/menu}">Menu Page</a>
+    <a th:href="@{/menu/shoppingcart}">Shopping Cart</a>
+	<a th:href="@{/menu/personalCenter/personalMainpage}">Personal Center</a>
+    <a th:href="@{/logout}">Log Out</a>
+</div>
+
+<div class="main-content">
+    <h1>PizzaMenu</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>PizzaName</th>
+                <th>PreviewPicture</th>
+                <th>Description</th>
+                <th>PizzaBasicPrice</th>
+                <th>Personalize</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="pizza : ${menuList}">
+                <td th:text="${pizza.name}"></td>
+                <td><img th:src="${pizza.imageurl}" width="100px" height="100px" /></td>
+                <td th:text="${pizza.description}"></td>
+                <td th:text="${pizza.price}"></td>
+                <td>
+                <form th:action="@{/menu/customization}" method="get">
+                    <input type="hidden" name="name" th:value="${pizza.name}">
+                    <input type="hidden" name="imageurl" th:value="${pizza.imageurl}">
+                    <input type="hidden" name="size" th:value="${pizza.size}">
+                    <input type="hidden" name="base" th:value="${pizza.base}">
+                    <input type="hidden" name="description" th:value="${pizza.description}">
+                    <button type="submit">customize</button>
+                </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

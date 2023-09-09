@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Personal Center</title>
+    <link rel="stylesheet" href="/static/css/customer/personalMainPage.css">
+</head>
+<body th:style="'background-image: url(/pngs/background.png)'">
+    <h1>Personal Center</h1>
+    <div class="main-container">
+		<div class="main-container">
+			<div class="sidebar">
+                <a th:href="@{/menu}">Menu Page</a>
+                <a th:href="@{/menu/shoppingcart}">Shopping Cart</a>
+                <a th:href="@{/menu/personalCenter/personalMainpage}">Personal Center</a>
+                <a th:href="@{/logout}">Log Out</a>
+            </div>
+        <div class="content">
+            <div class="box">
+                <a th:href="@{/menu/personalCenter/myAddress/viewAddress}">
+                    <button>Manage Personal Delivery Address</button>
+                </a>
+                <div class="text-box">
+                    <p>If you want to add, delete or name your delivery address, please click here!</p>
+                </div>
+            </div>
+            <div class="box">
+                <a th:href="@{/menu/personalCenter/editPersonalInformation}">
+                    <button>Edit Personal Information</button>
+                </a>
+                <div class="text-box">
+                    <p>If you want to change your User Name, Password or check your Phone Number, please click here!</p>
+                </div>
+            </div>
+            <div class="box">
+                <a th:href="@{/menu/personalCenter/orders}">
+                    <button>Orders</button>
+                </a>
+                <div class="text-box">
+                    <p>If you want to view your orders including uncompleted and historical orders, please click here!</p>
+                </div>
+            </div>
+        </div>
+</body>
+</html>
